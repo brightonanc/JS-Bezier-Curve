@@ -14,6 +14,8 @@ function getBinomialCoefficient(power, term) {
 function plotControlPoints() {
 	var ctx = document.getElementById("canvas").getContext("2d");
 	for(var i = 0; i < controlPoints.length; i++) {
+		var interpolation = i/controlPoints.length;
+		ctx.strokeStyle = "rgb("+Math.floor(255-interpolation*255)+","+Math.floor(255-Math.abs(0.5-interpolation)*2*255)+","+Math.floor(interpolation*255)+")";
 		ctx.beginPath();
 		ctx.arc(controlPoints[i].x, controlPoints[i].y, 4, 0, 2 * Math.PI);
 		ctx.stroke();
@@ -21,8 +23,10 @@ function plotControlPoints() {
 }
 function plotBezierCurve() {
 	var ctx = document.getElementById("canvas").getContext("2d");
+	ctx.strokeStyle = "black";
+	ctx.beginPath();
 	var power = controlPoints.length - 1;
-	for(var par = 0; par <= 1; par += 0.01) {
+	for(var par = 0; par <= 1; par += 0.005) {
 		var curX = 0;
 		var curY = 0;
 		for(var i = 0; i <= power; i++) {
@@ -56,6 +60,7 @@ function drawObjectTraversing(par) {
 		curX += controlPoints[i].x * getBinomialCoefficient(power, i) * Math.pow(par, i) * Math.pow((1 - par), power-i);
 		curY += controlPoints[i].y * getBinomialCoefficient(power, i) * Math.pow(par, i) * Math.pow((1 - par), power-i);
 	}
+	ctx.strokeStyle = "black";
 	ctx.beginPath()
 	ctx.arc(curX, curY, 7, 0, 2*Math.PI);
 	ctx.fill();
